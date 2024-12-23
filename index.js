@@ -55,8 +55,13 @@ const trainingData = [
     "enzian seelapper",
     "orfind ronstein",
     "sebastian silhelm",
-    "innse inntanz"
+    "innse inntanz",
+    "kelkena immerwind",
+    "frita megenturm",
+    "anhantus monnerhalle",
+    "rier züsenstein"
 ]
+document.querySelector('#trainingData').value = trainingData.join('\n')
 
 const net = new brain.recurrent.LSTM()
 
@@ -64,7 +69,7 @@ function train() {
     console.log('training 1500 epochs')
     const startTime = performance.now()
     
-    net.train(trainingData, {
+    let feedback = net.train(document.querySelector('#trainingData').value.split('\n'), {
         iterations: 1500,
         errorThresh: 0.011
     })
@@ -72,6 +77,7 @@ function train() {
     const endTime = performance.now()
     const trainingTime = (endTime - startTime) / 1000  // Convert to seconds
     console.log(`Training finished! Took ${trainingTime.toFixed(2)} seconds`)
+    console.log(feedback)
 }
     
 document.querySelector('#create').addEventListener('click', createNames)
@@ -140,11 +146,11 @@ function saveModel() {
 
 function createNames() {
     const newNames = []
-    const characters = [...new Set(trainingData.join(''))].join('')
+    const characters = [...new Set(trainingData.join(''))].join('').replace(' ', '').replace('-', '')
     
     for(let i = 0; i < 10; i++) {
         // Random seed length between 6 and 10
-        const length = Math.floor(Math.random() * 4) + 6
+        const length = Math.floor(Math.random() * 4) + 3
         
         // Create random seed
         let seed = ''
@@ -152,7 +158,9 @@ function createNames() {
             seed += characters[Math.floor(Math.random() * characters.length)]
         }
         
-        newNames.push(net.run(seed))
+        let newName = net.run(seed)
+        if(newName.replace(' ', '').length > 0)
+            newNames.push(newName)
     }
 
     document.querySelector('#names').innerHTML = newNames.join('<br>')
