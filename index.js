@@ -53,7 +53,9 @@ const trainingData = [
     "kelkena immerwind",
     "frita megenturm",
     "anhantus monnerhalle",
-    "rier züsenstein"
+    "rier züsenstein",
+    "ena megentanz",
+    "ronis hicht"
 ]
 document.querySelector('#trainingData').value = trainingData.join('\n')
 
